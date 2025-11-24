@@ -3,7 +3,7 @@ const React = require('react');
 const {useState, useEffect} = React;
 const {createRoot} = require('react-dom/client');
 
-const handleDomo = (e, onDomoAdded) => {
+const handleSong = (e, onDomoAdded) => {
   e.preventDefault();
   helper.hideError();
   
@@ -19,39 +19,39 @@ const handleDomo = (e, onDomoAdded) => {
   return false;
 }
 
-const DomoForm = (props) => {
+const SongForm = (props) => {
   return(
-    <form id='domoForm'
-      onSubmit={(e) => handleDomo(e, props.triggerReload)}
-      name='domoForm'
+    <form id='songForm'
+      onSubmit={(e) => handleSong(e, props.triggerReload)}
+      name='songForm'
       action="/maker"
       method="POST"
-      className='domoForm'>
-        <label htmlFor="name">Name: </label>
-        <input id='domoName' type='text' name='name' placeholder='Domo Name'/>
-        <label htmlFor="age">Age: </label>
-        <input id="domoAge" type="number" min="0" name='age'/>
-        <input className='makeDomoSubmit' type="submit" value="Make Domo" />
+      className='songForm'>
+        <label htmlFor="name">Song Name: </label>
+        <input id='songName' type='text' name='name' placeholder='Song Name'/>
+        <label htmlFor="artist">Artist: </label>
+        <input id="songArtist" type="number" min="0" name='artist'/>
+        <input className='makeDomoSubmit' type="submit" value="Add Song" />
       </form>
   );
 }
 
-const DomoList = (props) => {
-  const [domos, setDomos] = useState(props.domos);
+const SongList = (props) => {
+  const [songs, setSongs] = useState(props.songs);
 
   useEffect(() => {
-    const loadDomosFromServer = async () => {
-      const response = await fetch('/getDomos');
+    const loadPlaylistFromServer = async () => {
+      const response = await fetch('/getSongs');
       const data = await response.json();
-      setDomos(data.domos);
+      setSongs(data.songs);
     }
-    loadDomosFromServer();
-  }, [props.reloadDomos]);
+    loadPlaylistFromServer();
+  }, [props.reloadSongs]);
 
-  if(domos.length === 0) {
+  if(songs.length === 0) {
     return (
-      <div className='domoList'>
-        <h3 className='emptyDomo'>No Domos Yet!</h3>
+      <div className='playist'>
+        <h3 className='emptySong'>No Songs Yet!</h3>
       </div>
     );
   }
@@ -73,18 +73,57 @@ const DomoList = (props) => {
   );
 }
 
+const handleLogin = async (e) => {
+    e.preventDefault();
+    helper.hideError();
+
+    const username = e.target.querySelector('#user').value;
+    const pass = e.target.querySelector('#pass').value;
+
+    if (!username || !pass) {
+        helper.handleError('Username or Password is empty!');
+        return false;
+    }
+
+    //helper.sendPost(e.target.action, {username, pass});
+
+  const response = await fetch(e.target.action, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+
+    return false;
+}
+
 const App = () => {
-  const [reloadDomos, setReloadDomos] = useState(false);
+  const [reloadSongs, setReloadSongs] = useState(false);
 
   return (
     <div>
-      <div id='makeDomo'>
-        <DomoForm triggerReload={() => setReloadDomos(!reloadDomos)} />
+      <div id='addSong'>
+        <SongForm triggerReload={() => setReloadSongs(!reloadSongs)} />
       </div>
-      <div id='domos'>
-        <DomoList domos={[]} reloadDomos={reloadDomos}/>
+      <div id='songs'>
+        <SongList songs={[]} reloadSongs={reloadSongs}/>
       </div>
     </div>
+  );
+
+  return (
+    <form id='loginForm'
+      name='loginForm'
+      onSubmit={handleLogin}
+      action="/spotifyLogin"
+      method='POST'
+      className="mainForm">
+          <label htmlFor='username'>Spotify Username: </label>
+          <input id='user' type='text' name='username' placeholder='username' />
+          <label htmlFor="pass">Spotify Password</label>
+          <input id='pass' type='text' name='pass' placeholder='password'/>
+          <input className='formSubmit' type='submit' value="Sign in"/>
+    </form>
   );
 }
 

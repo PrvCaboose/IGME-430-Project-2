@@ -6,6 +6,9 @@ const router = (app) => {
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
 
+  app.get('/spotifyLogin', mid.requiresSecure, mid.requiresLogin, controllers.Spotify.login);
+  app.get('/callback', mid.requiresSecure, mid.requiresLogin, controllers.Spotify.callback);
+
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.post('/passChange', mid.requiresSecure, mid.requiresLogout, controllers.Account.changePassword);
 

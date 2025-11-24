@@ -10,8 +10,10 @@ const helmet = require('helmet');
 const session = require('express-session');
 const { RedisStore } = require('connect-redis');
 const redis = require('redis');
+const cors = require('cors');
 
 const router = require('./router.js');
+const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -33,13 +35,15 @@ redisClient.on('error', (err) => console.log('Redis client error', err));
 
 redisClient.connect().then(() => {
   const app = express();
+  app.use(cors());
 
-  app.use(helmet());
+  //app.use(helmet({contentSecurityPolicy: false}));
   app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted`)));
   app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
   app.use(compression());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
+
 
   app.use(session({
     key: 'sessionid',
@@ -49,6 +53,13 @@ redisClient.connect().then(() => {
     secret: 'Music Is Love',
     resave: false,
     saveUninitialized: false,
+  }));
+  
+  app.use(expressCspHeader({
+    policies: {
+        'default-src': [NONE],
+        'img-src': [SELF],
+    }
   }));
 
   app.engine('handlebars', expressHandlebars.engine({ defaultLayout: '' }));

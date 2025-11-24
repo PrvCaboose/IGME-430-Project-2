@@ -19,6 +19,7 @@ const sendPost = async (url, data, handler) => {
   document.getElementById('errorBox').classList.add('hidden');
 
   if(result.redirect) {
+    console.log(result);
     window.location = result.redirect;
   }
 
