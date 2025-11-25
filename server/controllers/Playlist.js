@@ -73,7 +73,6 @@ const getPlaylist = async (req, res) => {
         if (!docs) {
             return res.status(400).json({error: "No playlist created!"});
         }
-        //return res.status(400).json({error: "No playlist created!"});
 
         return res.status(200).json({playlist: docs});
     } catch (err) {

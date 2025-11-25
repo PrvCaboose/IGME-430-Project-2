@@ -35,6 +35,7 @@ const handlePlaylist = (e) => {
   }
 
   helper.sendPost(e.target.action, {name}, null);
+  e.hidden = true;
   return false;
 }
 
@@ -149,14 +150,13 @@ const getPlaylist = async () => {
   return true;
 }
 
-const App = async () => {
+const App = (props) => {
   const [reloadSongs, setReloadSongs] = useState(false);
-  const hidePlaylist = await getPlaylist();
 
   return (
     <div>
       <div>
-        <PlaylistForm hidden={hidePlaylist}/>
+        <PlaylistForm hidden={props.hidden}/>
       </div>
       <div id='addSong'>
         <SongForm triggerReload={() => setReloadSongs(!reloadSongs)} />
@@ -185,7 +185,10 @@ const App = async () => {
 
 const init = () => {
   const root = createRoot(document.getElementById('app'));
-  root.render(<App/>);
+  getPlaylist().then((e) => {
+    root.render(<App hidden={e}/>);
+  });
+  
 }
 
 window.onload = init;
