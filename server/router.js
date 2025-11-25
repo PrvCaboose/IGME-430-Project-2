@@ -9,6 +9,11 @@ const router = (app) => {
   app.get('/spotifyLogin', mid.requiresSecure, mid.requiresLogin, controllers.Spotify.login);
   app.get('/callback', mid.requiresSecure, mid.requiresLogin, controllers.Spotify.callback);
 
+  app.post('/createPlaylist', mid.requiresLogin, controllers.Playlist.initPlaylist);
+  app.post('/addSong', mid.requiresLogin, controllers.Playlist.addSong);
+  app.get('/getSongs', mid.requiresLogin, controllers.Playlist.getSongs);
+  app.get('/getPlaylist', mid.requiresLogin, controllers.Playlist.getPlaylist)
+
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.post('/passChange', mid.requiresSecure, mid.requiresLogout, controllers.Account.changePassword);
 

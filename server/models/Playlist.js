@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const SongSchema = require('./Song')
 const _ = require('underscore');
 
 const setName = (name) => _.escape(name).trim();
@@ -12,7 +11,11 @@ const PlaylistSchema = new mongoose.Schema({
         set: setName,
     },
     songs: {
-        type: [SongSchema],
+        type: [{
+            title: String,
+            artist: String,
+            length: Number,
+        }],
     },  
     owner: {
         type: mongoose.Schema.ObjectId,
@@ -26,5 +29,5 @@ PlaylistSchema.statics.toAPI = (doc) => ({
   songs: doc.songs,
 });
 
-const PlaylistModel = mongoose.model('Domo', PlaylistSchema);
+const PlaylistModel = mongoose.model('Playlist', PlaylistSchema);
 module.exports = PlaylistModel;
