@@ -12,7 +12,8 @@ const router = (app) => {
   app.post('/createPlaylist', mid.requiresLogin, controllers.Playlist.initPlaylist);
   app.post('/addSong', mid.requiresLogin, controllers.Playlist.addSong);
   app.get('/getSongs', mid.requiresLogin, controllers.Playlist.getSongs);
-  app.get('/getPlaylist', mid.requiresLogin, controllers.Playlist.getPlaylist)
+  app.get('/getPlaylist', mid.requiresLogin, controllers.Playlist.getPlaylist);
+  app.post('/removeSong', mid.requiresLogin, controllers.Playlist.removeSong);
 
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.post('/passChange', mid.requiresSecure, mid.requiresLogout, controllers.Account.changePassword);

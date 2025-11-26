@@ -81,9 +81,29 @@ const getPlaylist = async (req, res) => {
     }
 }
 
+const removeSong = async (req, res) => {
+    if (!req.body._id) {
+        return res.status(400).json({error: "No ID given!"});
+    }
+    try {
+        console.log(req.body._id);
+        const docs = await Playlist.updateOne({owner: req.session.Account._id}, {
+            $pull: {
+                songs: {_id: req.body._id}
+            }
+        }).lean().exec();
+        console.log(docs);
+        return res.status(204);
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({error: "There was an error removing the song"});
+    }
+}
+
 module.exports = {
     initPlaylist,
     addSong,
     getSongs,
-    getPlaylist
+    getPlaylist,
+    removeSong
 }

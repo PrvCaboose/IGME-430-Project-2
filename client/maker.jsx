@@ -150,6 +150,10 @@ const getPlaylist = async () => {
   return true;
 }
 
+const removeSong = async () => {
+  helper.sendPost('/removeSong', {_id: "6924b547112943a07c0b68be"});
+}
+
 const App = (props) => {
   const [reloadSongs, setReloadSongs] = useState(false);
 
@@ -185,6 +189,7 @@ const App = (props) => {
 
 const init = () => {
   const root = createRoot(document.getElementById('app'));
+  removeSong();
   getPlaylist().then((e) => {
     root.render(<App hidden={e}/>);
   });
