@@ -33,9 +33,9 @@ const handlePlaylist = (e) => {
     helper.handleError('Name is required!');
     return false;
   }
-
+  console.log(e);
   helper.sendPost(e.target.action, {name}, null);
-  e.hidden = true;
+  e.target.hidden = true;
   return false;
 }
 
@@ -92,7 +92,7 @@ const SongList = (props) => {
     loadPlaylistFromServer();
   }, [props.reloadSongs]);
 
-  if(songs.length === 0) {
+  if(!songs || songs.length === 0) {
     return (
       <div className='playist'>
         <h3 className='emptySong'>No Songs Yet!</h3>
@@ -151,7 +151,7 @@ const getPlaylist = async () => {
 }
 
 const removeSong = async () => {
-  helper.sendPost('/removeSong', {_id: "6924b547112943a07c0b68be"});
+  //helper.sendPost('/removeSong', {_id: "6924b547112943a07c0b68be"});
 }
 
 const App = (props) => {
