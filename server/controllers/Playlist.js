@@ -93,7 +93,7 @@ const removeSong = async (req, res) => {
       },
     }).lean().exec();
     console.log(docs);
-    return res.status(204);
+    return res.status(200).json({message: "Song Removed"});
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'There was an error removing the song' });

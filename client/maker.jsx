@@ -23,6 +23,13 @@ const handleSong = (e, onSongAdded) => {
   return false;
 }
 
+const removeSong = async (e, triggerReload) => {
+  e.preventDefault();
+  helper.hideError();
+  helper.sendPost('/removeSong', {_id: e.target.parentElement.id}, triggerReload);
+  return false;
+}
+
 const handlePlaylist = (e) => {
   e.preventDefault();
   helper.hideError();
@@ -89,6 +96,7 @@ const SongList = (props) => {
       console.log(data.songs);
       setSongs(data.songs);
     }
+    console.log("Triggered Reload");
     loadPlaylistFromServer();
   }, [props.reloadSongs]);
 
@@ -100,14 +108,19 @@ const SongList = (props) => {
     );
   }
 
+
+
   const songNodes = songs.map(song => {
     return (
-      <div key={song.id} className='song'>
+      <div key={song._id} id={song._id} className='song'>
         <h3 className='songTitle'>Title: {song.title}</h3>
         <h3 className='songArtist'>Artist: {song.artist}</h3>
+        <button type='button' onClick={(e) => removeSong(e, props.triggerReload)}>Remove Song</button>
       </div>
     );
   });
+
+  console.log(songNodes);
 
   return (
     <div className='songList'>
@@ -150,9 +163,7 @@ const getPlaylist = async () => {
   return true;
 }
 
-const removeSong = async () => {
-  //helper.sendPost('/removeSong', {_id: "6924b547112943a07c0b68be"});
-}
+
 
 const App = (props) => {
   const [reloadSongs, setReloadSongs] = useState(false);
@@ -166,7 +177,7 @@ const App = (props) => {
         <SongForm triggerReload={() => setReloadSongs(!reloadSongs)} />
       </div>
       <div id='songs'>
-        <SongList songs={[]} reloadSongs={reloadSongs}/>
+        <SongList songs={[]} reloadSongs={reloadSongs} triggerReload={() => setReloadSongs(!reloadSongs)}/>
       </div>
     </div>
   );
@@ -189,7 +200,6 @@ const App = (props) => {
 
 const init = () => {
   const root = createRoot(document.getElementById('app'));
-  removeSong();
   getPlaylist().then((e) => {
     root.render(<App hidden={e}/>);
   });
