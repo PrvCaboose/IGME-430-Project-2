@@ -26,6 +26,7 @@ const handleSong = (e, onSongAdded) => {
 const removeSong = async (e, triggerReload) => {
   e.preventDefault();
   helper.hideError();
+
   helper.sendPost('/removeSong', {_id: e.target.parentElement.id}, triggerReload);
   return false;
 }
@@ -93,10 +94,8 @@ const SongList = (props) => {
     const loadPlaylistFromServer = async () => {
       const response = await fetch('/getSongs');
       const data = await response.json();
-      console.log(data.songs);
       setSongs(data.songs);
     }
-    console.log("Triggered Reload");
     loadPlaylistFromServer();
   }, [props.reloadSongs]);
 
@@ -108,8 +107,6 @@ const SongList = (props) => {
     );
   }
 
-
-
   const songNodes = songs.map(song => {
     return (
       <div key={song._id} id={song._id} className='song'>
@@ -119,8 +116,6 @@ const SongList = (props) => {
       </div>
     );
   });
-
-  console.log(songNodes);
 
   return (
     <div className='songList'>
@@ -156,7 +151,7 @@ const handleLogin = async (e) => {
 const getPlaylist = async () => {
   let response = await fetch('/getPlaylist');
   response = await response.json();
-  console.log(response.error);
+
   if (response.error) {
     return false;
   }
