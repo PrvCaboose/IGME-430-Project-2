@@ -19,6 +19,12 @@ const handleSong = (e, onSongAdded) => {
     return false;
   }
 
+  // clear input
+  e.target.querySelector('#songTitle').value = '';
+  e.target.querySelector('#songArtist').value = '';
+  e.target.querySelector('#songLengthMin').value = '';
+  e.target.querySelector('#songLengthSec').value = '';
+
   helper.sendPost(e.target.action, {title, artist, length}, onSongAdded);
   return false;
 }
@@ -108,11 +114,13 @@ const SongList = (props) => {
   }
 
   const songNodes = songs.map(song => {
+    const param = new URLSearchParams({'search_query' : song.title + ' ' + song.artist});
     return (
       <div key={song._id} id={song._id} className='song'>
         <h3 className='songTitle'>Title: {song.title}</h3>
         <h3 className='songArtist'>Artist: {song.artist}</h3>
         <button type='button' onClick={(e) => removeSong(e, props.triggerReload)}>Remove Song</button>
+        <a href={'https://www.youtube.com/results?'+param.toString()} target='_blank'>Search Song on Youtube</a>
       </div>
     );
   });
