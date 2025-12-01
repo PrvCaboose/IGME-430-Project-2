@@ -177,22 +177,55 @@ nav:nth-child(1) {
 .song {
     display: flex;
     flex-direction: row;
-    margin: 0.5em;
+    align-items: center;
+    /*margin: 0.5em;*/
+    outline: black 1px solid;
+    column-gap: 10px;
 }
 
 .songList {
     display: flex;
     flex-direction: column;
-
-    h3 {
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-
+    position: fixed;
+    left: 20%;
+    overflow: scroll;
+    height: 80%;
+    outline: black 1px solid;
 
 }
 
 h3.songTitle {
     margin-right: 5px;
     margin-left: 5px;
+}
+
+#ad_1 {
+    position: fixed;
+    left: 5px;
+    width: 15%;
+    margin-top: auto;
+    margin-bottom: auto;
+    display: inline-block;
+    height: 80%;
+    vertical-align: middle;
+}
+
+#ad_2 {
+    position: fixed;
+    right: 5px;
+    width: 15%;
+    display: inline-block;
+    height: 80%;
+    vertical-align: middle;
+}
+
+#ad_3 {
+    position: fixed;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 20%;
+    width: 50%;
+    bottom: 5px;
+    left: 25%;
 }

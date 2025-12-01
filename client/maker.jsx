@@ -120,7 +120,7 @@ const SongList = (props) => {
         <h3 className='songTitle'>Title: {song.title}</h3>
         <h3 className='songArtist'>Artist: {song.artist}</h3>
         <button type='button' onClick={(e) => removeSong(e, props.triggerReload)}>Remove Song</button>
-        <a href={'https://www.youtube.com/results?'+param.toString()} target='_blank'>Search Song on Youtube</a>
+        <a href={'https://www.youtube.com/results?'+param.toString()} target='_blank'>Search on Youtube</a>
       </div>
     );
   });
