@@ -53,23 +53,33 @@ const handlePlaylist = (e) => {
   return false;
 }
 
+const showForm = () => {
+  const overlay = document.getElementById('popupOverlay');
+  overlay.classList.toggle('show');
+}
+
 const SongForm = (props) => {
   return(
-    <form id='songForm'
-      onSubmit={(e) => handleSong(e, props.triggerReload)}
-      name='songForm'
-      action="/addSong"
-      method="POST"
-      className='songForm'>
-        <label htmlFor="title">Song Title: </label>
-        <input id='songTitle' type='text' name='title' placeholder='Song Title'/>
-        <label htmlFor="artist">Artist: </label>
-        <input id="songArtist" type="text" name='artist'/>
-        <label htmlFor="length">Length: </label>
-        <input id="songLengthMin" type="number" min="0" name='length' placeholder='minutes'/>
-        <input id="songLengthSec" type="number" min="0" max="60" name='length' placeholder='seconds'/>
-        <input className='makeSongSubmit' type="submit" value="Add Song" />
-      </form>
+    <div id='popupOverlay' className='overlay-container'>
+      <div className='popup-box'>
+        <form id='songForm'
+        onSubmit={(e) => handleSong(e, props.triggerReload)}
+        name='songForm'
+        action="/addSong"
+        method="POST"
+        className='songForm'>
+          <label htmlFor="title">Song Title: </label>
+          <input id='songTitle' type='text' name='title' placeholder='Song Title'/>
+          <label htmlFor="artist">Artist: </label>
+          <input id="songArtist" type="text" name='artist'/>
+          <label htmlFor="length">Length: </label>
+          <input id="songLengthMin" type="number" min="0" name='length' placeholder='minutes'/>
+          <input id="songLengthSec" type="number" min="0" max="60" name='length' placeholder='seconds'/>
+          <input className='makeSongSubmit' type="submit" value="Add Song" />
+        </form>
+      </div>
+    </div>
+    
   );
 }
 
@@ -125,10 +135,29 @@ const SongList = (props) => {
     );
   });
 
+  let playlistSec = 0;
+
+  console.log(songs);
+  songs.forEach(song => {
+    playlistSec += song.length;
+  });
+
+  const playlistHour = Math.floor(playlistSec / 3600);
+  playlistSec = playlistSec % 3600;
+  const playlistMin = Math.floor(playlistSec/60);
+
+  console.log(`${playlistHour}:${playlistMin}`);
+
+
   return (
-    <div className='songList'>
-      {songNodes}
-    </div>
+      <div className='songList'>
+        <div className='playlistHeader'>
+          <h1>{props.playlist.playlist.name}</h1>
+          <h1>{playlistHour}h {playlistMin}min</h1>
+          <button type='button' onClick={showForm}>Add Song</button>
+        </div>
+        {songNodes}
+      </div>
   );
 }
 
@@ -163,14 +192,14 @@ const getPlaylist = async () => {
   if (response.error) {
     return false;
   }
-  return true;
+  return response;
 }
 
 
 
 const App = (props) => {
   const [reloadSongs, setReloadSongs] = useState(false);
-
+  console.log(props.playlist);
   return (
     <div>
       <div>
@@ -180,7 +209,7 @@ const App = (props) => {
         <SongForm triggerReload={() => setReloadSongs(!reloadSongs)} />
       </div>
       <div id='songs'>
-        <SongList songs={[]} reloadSongs={reloadSongs} triggerReload={() => setReloadSongs(!reloadSongs)}/>
+        <SongList playlist={props.playlist} songs={[]} reloadSongs={reloadSongs} triggerReload={() => setReloadSongs(!reloadSongs)}/>
       </div>
     </div>
   );
@@ -204,7 +233,7 @@ const App = (props) => {
 const init = () => {
   const root = createRoot(document.getElementById('app'));
   getPlaylist().then((e) => {
-    root.render(<App hidden={e}/>);
+    root.render(<App hidden={e} playlist={e}/>);
   });
   
 }
