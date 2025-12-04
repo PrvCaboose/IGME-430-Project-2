@@ -120,6 +120,7 @@ nav:nth-child(1) {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content:flex-end;
     /*margin: 0.5em;*/
     outline: black 1px solid;
     column-gap: 10px;
@@ -132,13 +133,33 @@ nav:nth-child(1) {
     left: 16%;
     overflow: scroll;
     height: 65%;
+    width: 30%;
     outline: black 1px solid;
     z-index: 0;
 }
 
+.songInfo {
+    flex-grow: 3;
+    text-align: left;
+}
+
 h3.songTitle {
+    margin: 5px;
+}
+
+h3.songArtist {
+    margin: 5px;
+    font-size: small;
+}
+
+p.songLength, button.songButton, a.songLink {
+    align-self: flex-end;
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
+a.songLink {
     margin-right: 5px;
-    margin-left: 5px;
 }
 
 #ad_1 {

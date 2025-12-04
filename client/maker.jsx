@@ -24,6 +24,7 @@ const handleSong = (e, onSongAdded) => {
   e.target.querySelector('#songArtist').value = '';
   e.target.querySelector('#songLengthMin').value = '';
   e.target.querySelector('#songLengthSec').value = '';
+  showForm();
 
   helper.sendPost(e.target.action, {title, artist, length}, onSongAdded);
   return false;
@@ -125,12 +126,23 @@ const SongList = (props) => {
 
   const songNodes = songs.map(song => {
     const param = new URLSearchParams({'search_query' : song.title + ' ' + song.artist});
+    let songSec = song.length % 60;
+    let songMin = Math.floor(song.length/60);
+
+    if (songSec === 0) {
+      songSec = '00';
+    } else if (songSec < 10) {
+      songSec = `0${songSec}`;
+    }
     return (
       <div key={song._id} id={song._id} className='song'>
-        <h3 className='songTitle'>Title: {song.title}</h3>
-        <h3 className='songArtist'>Artist: {song.artist}</h3>
-        <button type='button' onClick={(e) => removeSong(e, props.triggerReload)}>Remove Song</button>
-        <a href={'https://www.youtube.com/results?'+param.toString()} target='_blank'>Search on Youtube</a>
+        <div className='songInfo'>
+          <h3 className='songTitle'>{song.title}</h3>
+          <h3 className='songArtist'>{song.artist}</h3>
+        </div>
+        <p className='songLength'>{songMin}:{songSec}</p>
+        <a className='songLink' href={'https://www.youtube.com/results?'+param.toString()} target='_blank'>Search on Youtube</a>
+        <button className='songButton' type='button' onClick={(e) => removeSong(e, props.triggerReload)}>Remove Song</button>
       </div>
     );
   });
