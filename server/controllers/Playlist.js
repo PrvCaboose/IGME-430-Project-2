@@ -41,7 +41,10 @@ const addSong = async (req, res) => {
     if (!docs) {
       return res.status(400).json({ error: 'No playlist created!' });
     }
-    await Playlist.findOneAndUpdate({ name: docs.name }, { $push: { songs: songData } }).lean().exec();
+    await Playlist.findOneAndUpdate(
+      { name: docs.name },
+      { $push: { songs: songData } },
+    ).lean().exec();
     return res.status(201).json({ song: songData });
   } catch (err) {
     console.log(err);
@@ -93,7 +96,7 @@ const removeSong = async (req, res) => {
       },
     }).lean().exec();
     console.log(docs);
-    return res.status(200).json({message: "Song Removed"});
+    return res.status(200).json({ message: 'Song Removed' });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'There was an error removing the song' });
