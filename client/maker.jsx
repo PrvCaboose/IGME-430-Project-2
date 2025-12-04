@@ -164,9 +164,11 @@ const SongList = (props) => {
   return (
       <div className='songList'>
         <div className='playlistHeader'>
-          <h1>{props.playlist.playlist.name}</h1>
-          <h1>{playlistHour}h {playlistMin}min</h1>
-          <button type='button' onClick={showForm}>Add Song</button>
+          <div className='playlistInfo'>
+            <h1 id='playlistName'>{props.playlist.playlist.name}</h1>
+            <h1 id='playlistTime'>{playlistHour}h {playlistMin}min</h1>
+          </div>
+          <button className='addSongButton' type='button' onClick={showForm}>Add Song</button>
         </div>
         {songNodes}
       </div>
