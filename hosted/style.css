@@ -4,6 +4,7 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    background-color: rgb(83, 83, 83);
 }
 
 #logo {
@@ -17,7 +18,7 @@ html, body {
 nav {
     width: 100%;
     height: 50px;
-    background-color: #55acee;
+    background-color: #009434;
 }
 
 nav:nth-child(1) {
@@ -28,23 +29,24 @@ nav:nth-child(1) {
     padding: 5px;
     padding-top: 12px;
     padding-left: 20px;
-    color: white;
+    color: rgb(0, 0, 0);
     font-size: 1.3em;
+    font-weight: bold;
     float: left;
 }
 
 .navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
-    color: white;
+    color: black;
     text-decoration: none;
     padding: 5px;
     border-radius: 4px;
-    background-color: #55acee;
+    background-color: #009434;
     transition: background-color 0.4s ease;
 }
 
 .navlink a:hover {
     transition: background-color 0.8s ease;
-    background-color: #66bdff;
+    background-color: #009434;
 }
 
 
@@ -116,6 +118,37 @@ nav:nth-child(1) {
     font-style: italic;
 }
 
+.playlistFormContainer {
+    display: block;
+    margin: auto;
+    width: 40%;
+    height: 40%;
+    padding-top: 10%;
+}
+
+.playlistForm {
+    margin: auto;
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(41, 41, 41);
+    color: white;
+    border-radius: 3px;
+
+    label {
+        margin-top: 10px;
+    }
+    
+}
+
+.makePlaylistSubmit {
+    margin-bottom: 10px;
+    background-color:rgb(20, 255, 55);
+    border: hidden;
+    border-radius: 5px;
+}
+
 .song {
     display: flex;
     flex-direction: row;
@@ -138,11 +171,18 @@ nav:nth-child(1) {
     background-color: rgb(41, 41, 41);
     color: white;
     z-index: 0;
+    margin-top: 5px;
 }
 
 
 #playlistTime {
     font-size: large;
+    margin: 0px 5px;
+}
+
+#playlistName {
+    margin-top: 10px;
+    margin-bottom: 5px;
 }
 
 .playlistHeader {
@@ -154,7 +194,16 @@ nav:nth-child(1) {
 .addSongButton {
     align-self: center;
     height: 50%;
-    
+    border-radius: 50px;
+    margin-right: 15px;
+    background-color: rgb(20, 255, 55);
+    border: hidden;
+}
+.addSongButton:hover {
+    background-color: rgb(17, 204, 45);
+}
+.addSongButton:active {
+    background-color: rgb(33, 252, 66);
 }
 
 .songInfo {
@@ -169,12 +218,26 @@ h3.songTitle {
 h3.songArtist {
     margin: 5px;
     font-size: small;
+    color: lightgray;
 }
 
 p.songLength, button.songButton, a.songLink {
     align-self: flex-end;
     margin: 0px;
     margin-bottom: 5px;
+}
+
+button.songButton{
+    background-color: rgb(20, 255, 55);
+    border: hidden;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+button.songButton:hover {
+    background-color: rgb(17, 204, 45);
+}
+button.songButton:active {
+    background-color: rgb(33, 252, 66);
 }
 
 a.songLink {
@@ -222,7 +285,54 @@ a.songLink:visited {
 .songForm {
     display: flex;
     flex-direction: column;
+    align-items: start;
+    margin: 0;
 }
+.songFormTitle, .songFormArtist {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 2px;
+    input {
+        width: 70%;
+    }
+}
+
+.songFormLength {
+    width: 100%;
+    margin-bottom: 2px;
+    input {
+        width: 35%;
+    }
+    label {
+        padding-right: 13%;
+    }
+}
+
+.songFormButtons {
+    align-self: center;
+    width: 100%;
+
+    input {
+        margin-left: 10%;
+        margin-right: 10%;
+        background-color: rgb(20, 255, 55);
+        width: 30%;
+        border-radius: 5px;
+        border-style: hidden;
+    }
+    input:hover {
+    background-color: rgb(17, 204, 45);
+    }
+    input:active {
+        background-color: rgb(33, 252, 66);
+    }
+}
+
+
+
+
+
 /*CSS obtained from https://www.geeksforgeeks.org/javascript/how-to-create-a-popup-form-using-html-css-and-javascript/*/
 .overlay-container {
     display: none;
@@ -240,7 +350,6 @@ a.songLink:visited {
 }
 
 .popup-box {
-    background: #fff;
     padding: 24px;
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
@@ -249,6 +358,9 @@ a.songLink:visited {
     opacity: 0;
     transform: scale(0.8);
     animation: fadeInUp 0.5s ease-out forwards;
+    background-color: rgb(41, 41, 41);
+    color: white;
+
 }
 /* Keyframes for fadeInUp animation */
 @keyframes fadeInUp {

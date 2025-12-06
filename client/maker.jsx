@@ -69,14 +69,23 @@ const SongForm = (props) => {
         action="/addSong"
         method="POST"
         className='songForm'>
-          <label htmlFor="title">Song Title: </label>
-          <input id='songTitle' type='text' name='title' placeholder='Song Title'/>
-          <label htmlFor="artist">Artist: </label>
-          <input id="songArtist" type="text" name='artist'/>
-          <label htmlFor="length">Length: </label>
-          <input id="songLengthMin" type="number" min="0" name='length' placeholder='minutes'/>
-          <input id="songLengthSec" type="number" min="0" max="60" name='length' placeholder='seconds'/>
-          <input className='makeSongSubmit' type="submit" value="Add Song" />
+          <div className='songFormTitle'>
+            <label htmlFor="title">Song Title: </label>
+            <input id='songTitle' type='text' name='title' placeholder='Song Title'/>
+          </div>
+          <div className='songFormArtist'>
+            <label htmlFor="artist">Artist: </label>
+            <input id="songArtist" type="text" name='artist' placeholder='Song Artist'/>
+          </div>
+          <div className='songFormLength'>
+            <label htmlFor="length">Length: </label>
+            <input id="songLengthMin" type="number" min="0" name='length' placeholder='minutes'/>
+            <input id="songLengthSec" type="number" min="0" max="60" name='length' placeholder='seconds'/>
+          </div>
+          <div className='songFormButtons'>
+            <input className='makeSongSubmit' type="submit" value="Add Song" />
+            <input className='addSongCancel' type='button' value="Cancel" onClick={showForm}/>
+          </div>
         </form>
       </div>
     </div>
@@ -89,17 +98,19 @@ const PlaylistForm = (props) => {
     return (<></>);
   } else {
     return(
-      <form id='playlistForm'
-        onSubmit={(e) => handlePlaylist(e)}
-        name='playlistForm'
-        action="/createPlaylist"
-        method="POST"
-        className='playlistForm'
-        hidden="">
-          <label htmlFor="name">Playlist Name: </label>
-          <input id='playlistName' type='text' name='name' placeholder='Playlist Name'/>
-          <input className='makePlaylistSubmit' type="submit" value="Create Playlist" />
-      </form>
+      <div className='playlistFormContainer'>
+        <form id='playlistForm'
+          onSubmit={(e) => handlePlaylist(e)}
+          name='playlistForm'
+          action="/createPlaylist"
+          method="POST"
+          className='playlistForm'
+          hidden="">
+            <label htmlFor="name">Playlist Name: </label>
+            <input id='playlistName' type='text' name='name' placeholder='Playlist Name'/>
+            <input className='makePlaylistSubmit' type="submit" value="Create Playlist" />
+        </form>
+      </div>
     );
   }
 }
@@ -116,11 +127,9 @@ const SongList = (props) => {
     loadPlaylistFromServer();
   }, [props.reloadSongs]);
 
-  if(!songs || songs.length === 0) {
-    return (
-      <div className='playist'>
-        <h3 className='emptySong'>No Songs Yet!</h3>
-      </div>
+  if (!props.playlist) {
+    return(
+      <div></div>
     );
   }
 
@@ -149,7 +158,6 @@ const SongList = (props) => {
 
   let playlistSec = 0;
 
-  console.log(songs);
   songs.forEach(song => {
     playlistSec += song.length;
   });
@@ -158,11 +166,8 @@ const SongList = (props) => {
   playlistSec = playlistSec % 3600;
   const playlistMin = Math.floor(playlistSec/60);
 
-  console.log(`${playlistHour}:${playlistMin}`);
-
-
   return (
-      <div className='songList'>
+      <div className='songList' hidden="True">
         <div className='playlistHeader'>
           <div className='playlistInfo'>
             <h1 id='playlistName'>{props.playlist.playlist.name}</h1>
