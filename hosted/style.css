@@ -46,6 +46,10 @@ nav {
     background-color: #009434;
 }
 
+#getPremiumLink {
+    cursor: pointer;
+}
+
 
 .mainForm {
     display: flex;

@@ -6,15 +6,20 @@
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
 </head>
 <body>
-  <nav><a href="/login"><img id="logo" src="" alt="face logo"/></a>
+  <nav>
     <div class="navlink"><a href="/logout">Log out</a></div>
+    {{#unless isPremium}}
+    <div class="navlink" id="getPremium"><a id="getPremiumLink">Get Premium</a></div>
+    {{/unless}}
   </nav>
 
+  {{#unless isPremium}}
   <section id="adSpace">
     <img id="ad_1" src="../assets/img/ad_2.png">
     <img id="ad_2" src="../assets/img/ad_2.png">
     <img id="ad_3" src="../assets/img/ad_1.png">
   </section>
+  {{/unless}}
 
   <section id="app">
 

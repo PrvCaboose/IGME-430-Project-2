@@ -38,7 +38,7 @@ const removeSong = async (e, triggerReload) => {
   return false;
 }
 
-const handlePlaylist = (e) => {
+const handlePlaylist = (e, onPlaylistCreated) => {
   e.preventDefault();
   helper.hideError();
   
@@ -48,8 +48,7 @@ const handlePlaylist = (e) => {
     helper.handleError('Name is required!');
     return false;
   }
-  console.log(e);
-  helper.sendPost(e.target.action, {name}, null);
+  helper.sendPost(e.target.action, {name}, onPlaylistCreated);
   e.target.hidden = true;
   return false;
 }
@@ -100,7 +99,7 @@ const PlaylistForm = (props) => {
     return(
       <div className='playlistFormContainer'>
         <form id='playlistForm'
-          onSubmit={(e) => handlePlaylist(e)}
+          onSubmit={(e) => handlePlaylist(e, init)}
           name='playlistForm'
           action="/createPlaylist"
           method="POST"
@@ -214,15 +213,17 @@ const getPlaylist = async () => {
   return response;
 }
 
+const getPremium = () => {
+  helper.sendPost('/buyPremium', {}, null);
+}
 
 
 const App = (props) => {
   const [reloadSongs, setReloadSongs] = useState(false);
-  console.log(props.playlist);
   return (
     <div>
       <div>
-        <PlaylistForm hidden={props.hidden}/>
+        <PlaylistForm hidden={props.hidden} triggerReload={() => setReloadSongs(!reloadSongs)}/>
       </div>
       <div id='addSong'>
         <SongForm triggerReload={() => setReloadSongs(!reloadSongs)} />
@@ -250,6 +251,11 @@ const App = (props) => {
 }
 
 const init = () => {
+  const getPremiumBtn = document.getElementById('getPremiumLink');
+  if (getPremiumBtn) {
+    getPremiumBtn.onclick = getPremium;
+  }
+
   const root = createRoot(document.getElementById('app'));
   getPlaylist().then((e) => {
     root.render(<App hidden={e} playlist={e}/>);

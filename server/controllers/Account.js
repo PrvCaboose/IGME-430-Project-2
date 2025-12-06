@@ -89,14 +89,15 @@ const buyPremium = async (req, res) => {
   }
 
   try {
-    const query = req.session.Account._id;
-    await Account.findOneAndUpdate({query}, {isPremium: true});
-    return res.status(201).json({success: "Premium have been purchased!"});
+    const query = { _id: `${req.session.Account._id}` };
+    await Account.findOneAndUpdate(query, { isPremium: true });
+    req.session.Account.isPremium = true;
+    return res.status(201).json({ redirect: '/maker' });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({error: 'There was an error gettting premium'});
+    return res.status(500).json({ error: 'There was an error gettting premium' });
   }
-}
+};
 
 module.exports = {
   loginPage,
@@ -104,5 +105,5 @@ module.exports = {
   login,
   signup,
   changePassword,
-  buyPremium
+  buyPremium,
 };

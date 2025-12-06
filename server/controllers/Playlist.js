@@ -2,6 +2,10 @@ const models = require('../models');
 
 const { Playlist } = models;
 
+const makerPage = (req, res) => {
+  res.render('app', { isPremium: req.session.Account.isPremium });
+};
+
 const initPlaylist = async (req, res) => {
   if (!req.body.name) {
     return res.status(400).json({ error: 'Playlist name is required' });
@@ -109,4 +113,5 @@ module.exports = {
   getSongs,
   getPlaylist,
   removeSong,
+  makerPage,
 };
