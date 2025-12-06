@@ -83,10 +83,26 @@ const changePassword = async (req, res) => {
   }
 };
 
+const buyPremium = async (req, res) => {
+  if (!req.session.Account._id) {
+    return res.status(400).json({ error: 'No Account id!' });
+  }
+
+  try {
+    const query = req.session.Account._id;
+    await Account.findOneAndUpdate({query}, {isPremium: true});
+    return res.status(201).json({success: "Premium have been purchased!"});
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({error: 'There was an error gettting premium'});
+  }
+}
+
 module.exports = {
   loginPage,
   logout,
   login,
   signup,
   changePassword,
+  buyPremium
 };

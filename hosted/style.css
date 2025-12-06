@@ -19,16 +19,13 @@ nav {
     width: 100%;
     height: 50px;
     background-color: #009434;
-}
-
-nav:nth-child(1) {
-    padding-left: 25px;
+    display: flex;
+    justify-content: center;
 }
 
 .navlink {
     padding: 5px;
     padding-top: 12px;
-    padding-left: 20px;
     color: rgb(0, 0, 0);
     font-size: 1.3em;
     font-weight: bold;
@@ -51,48 +48,51 @@ nav:nth-child(1) {
 
 
 .mainForm {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     height: 300px;
     width: 350px;
     margin: 0 auto;
-    padding-top: 350px;
+    padding-top: 100px;
     font-size: 1.2em;
+
+    label {
+        color: white;
+    }
+
+    input {
+        margin-bottom: 10px;
+    }
 }
 
 .mainForm h3 {
     text-align: center;
 }
 
-.mainForm label {
-    display: inline-block;
-    width: 100px;
-    margin-right: 10px;
-    text-align: right;
-    font-size: 1.2em;
+#loginPageContainer {
+    background-color: rgb(41, 41, 41);
+    margin: auto;
+    width: 50%;
 }
 
 .formSubmit {
     transition: background-color 0.4s ease;
     display: block;
     text-align: center;
-    margin: 0 auto;
-    margin-top: 14px;
+    margin: 0;
     font-size: 1.2em;
-    width: 100px;
-    background-color: #55acee;
-    border-radius: 2px;
-    border-color: #66acee;
+    width: fit-content;
+    background-color: rgb(20, 255, 55);
+    border-radius: 5px;
+    border: hidden;
     padding: 3px 0px;
-    color: white;
     text-decoration: none;
-}
-
-.formSubmit:link, .formSubmit:visited, .formSubmit:hover, .formSubmit:active {
-    color: white;
 }
 
 .formSubmit:hover {
     transition: background-color 0.4s ease;
-    background-color: #338acc;
+    background-color: rgb(17, 204, 45);
 }
 
 #user, #pass, #pass2 {
@@ -259,7 +259,6 @@ a.songLink:visited {
     margin-bottom: auto;
     display: inline-block;
     height: 80%;
-    vertical-align: middle;
 }
 
 #ad_2 {

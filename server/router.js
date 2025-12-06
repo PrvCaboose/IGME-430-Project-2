@@ -2,9 +2,9 @@ const controllers = require('./controllers');
 const mid = require('./middleware');
 
 const router = (app) => {
-  app.get('/getDomos', mid.requiresLogin, controllers.Domo.getDomos);
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
+  app.post('/buyPremium', mid.requiresLogin, controllers.Account.buyPremium);
 
   app.get('/spotifyLogin', mid.requiresSecure, mid.requiresLogin, controllers.Spotify.login);
   app.get('/callback', mid.requiresSecure, mid.requiresLogin, controllers.Spotify.callback);
