@@ -3,7 +3,11 @@ const models = require('../models');
 const { Playlist } = models;
 
 const makerPage = (req, res) => {
-  res.render('app', { isPremium: req.session.Account.isPremium });
+  let hasToken = false;
+  if (req.session.Account.token) {
+    hasToken = true;
+  }
+  res.render('app', { isPremium: req.session.Account.isPremium,  hasToken: hasToken});
 };
 
 const initPlaylist = async (req, res) => {

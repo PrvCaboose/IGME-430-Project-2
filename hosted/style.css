@@ -16,7 +16,8 @@ html, body {
 }
 
 nav {
-    width: 100%;
+    width: fit-content;
+    margin: auto;
     height: 50px;
     background-color: #009434;
     display: flex;
@@ -97,6 +98,25 @@ nav {
 .formSubmit:hover {
     transition: background-color 0.4s ease;
     background-color: rgb(17, 204, 45);
+}
+
+#spotifyWrapper {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 54%;
+    overflow: scroll;
+    height: 65%;
+    width: 30%;
+    outline: black 4px solid;
+    background-color: rgb(41, 41, 41);
+    color: white;
+    z-index: 0;
+    margin-top: 5px;
+}
+
+#spotifySearch {
+    margin: 5px auto;
 }
 
 #user, #pass, #pass2 {

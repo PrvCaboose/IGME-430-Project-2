@@ -22,8 +22,35 @@
   {{/unless}}
 
   <section id="app">
-
+    
   </section>
+
+  <div id="spotifyWrapper">
+      {{#if hasToken}}
+        <form id='spotifySearch'
+        onSubmit={handleSpotifySearch}
+        action='/searchSong'
+        method='POST'
+        className='searchForm'
+        >
+          <input type="search" name="songName" id="songNameBox" placeholder="Song Title"/>
+          <input type="search" name="songArtist" id="songArtistBox" placeholder="Song Artist"/>
+          <input type="submit" value="Search Spotify" className="spotifySearchSubmit">
+        </form>
+        <div className='searchBox'>
+
+        </div>
+        {{else}}
+        <form id='loginForm'
+          name='loginForm'
+          onSubmit={handleLogin}
+          action="/spotifyLogin"
+          method='GET'
+          className="mainForm">
+              <input className='formSubmit' name='linkSubmit' type='submit' value="Link Spotify"/>
+        </form>
+    {{/if}}
+    </div>
 
   <div id="errorBox" class='hidden'>
     <h3><span id="errorMessage"></span></h3>

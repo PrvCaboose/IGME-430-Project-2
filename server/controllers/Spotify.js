@@ -45,13 +45,13 @@ const callback = async (req, res) => {
   //   },
   //   json: true,
   // };
-
-  const response = await fetch('https://accounts.spotify.com/api/token', {
+  let authCode = Buffer.from(`${CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`);
+  authCode = authCode.toString('base64');
+  let response = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
-      Authorization: `Basic ${Buffer.from(`${CLIENT_ID}:
-        ${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64')}`,
+      Authorization: `Basic ${authCode}`,
     },
     body: new URLSearchParams({
       code,
@@ -60,11 +60,40 @@ const callback = async (req, res) => {
     }),
     json: true,
   });
-  console.log(await response.json());
+  response = await response.json();
+  req.session.Account.token = response.access_token;
+
+  searchSongs(req, res);
   // PROCESS api token
 
   return res.redirect('/maker');
 };
+
+const searchSongs = async (req, res) => {
+  url = 'https://api.spotify.com/v1/search?q=track:Mirror%20artist:Kendrick%20Lamar&type=track';
+  let response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + req.session.Account.token 
+    },
+  });
+
+  let items = await response.json();
+  console.log(items)
+  console.log(items.tracks.items);
+  
+  response = await fetch('https://api.spotify.com/v1/tracks/5xoYormSTltk6F9SlQV6mm', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + req.session.Account.token 
+    },
+  });
+
+  response = await response.json();
+
+  console.log(response)
+
+}
 
 module.exports = {
   login,

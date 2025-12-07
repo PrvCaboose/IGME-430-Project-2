@@ -180,27 +180,19 @@ const SongList = (props) => {
 }
 
 const handleLogin = async (e) => {
-    e.preventDefault();
-    helper.hideError();
+  e.preventDefault();
+  helper.hideError();
 
-    const username = e.target.querySelector('#user').value;
-    const pass = e.target.querySelector('#pass').value;
-
-    if (!username || !pass) {
-        helper.handleError('Username or Password is empty!');
-        return false;
-    }
-
-    //helper.sendPost(e.target.action, {username, pass});
-
-  const response = await fetch(e.target.action, {
+  let response = await fetch(e.target.action, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     }
   });
 
-    return false;
+  response = await response.json();
+  window.location = response.redirect;
+  return false;
 }
 
 const getPlaylist = async () => {
@@ -211,6 +203,14 @@ const getPlaylist = async () => {
     return false;
   }
   return response;
+}
+
+const handleSpotifySearch = async () => {
+
+}
+
+const SpotifyLink = () => {
+
 }
 
 const getPremium = () => {
@@ -233,27 +233,20 @@ const App = (props) => {
       </div>
     </div>
   );
-
-  return (
-    <form id='loginForm'
-      name='loginForm'
-      onSubmit={handleLogin}
-      action="/spotifyLogin"
-      method='POST'
-      className="mainForm">
-          <label htmlFor='username'>Spotify Username: </label>
-          <input id='user' type='text' name='username' placeholder='username' />
-          <label htmlFor="pass">Spotify Password</label>
-          <input id='pass' type='text' name='pass' placeholder='password'/>
-          <input className='formSubmit' type='submit' value="Sign in"/>
-    </form>
-  );
 }
 
 const init = () => {
   const getPremiumBtn = document.getElementById('getPremiumLink');
   if (getPremiumBtn) {
     getPremiumBtn.onclick = getPremium;
+  }
+
+  let spotifyForm = document.getElementById('loginForm');
+  if (spotifyForm) {
+    spotifyForm.onsubmit = handleLogin;
+  } else {
+    spotifyForm = document.getElementById('spotifySearch');
+    spotifyForm.onsubmit = handleSpotifySearch;
   }
 
   const root = createRoot(document.getElementById('app'));
