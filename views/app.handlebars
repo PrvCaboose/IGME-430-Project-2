@@ -28,14 +28,13 @@
   <div id="spotifyWrapper">
       {{#if hasToken}}
         <form id='spotifySearch'
-        onSubmit={handleSpotifySearch}
         action='/searchSong'
         method='POST'
         className='searchForm'
         >
           <input type="search" name="songName" id="songNameBox" placeholder="Song Title"/>
           <input type="search" name="songArtist" id="songArtistBox" placeholder="Song Artist"/>
-          <input type="submit" value="Search Spotify" className="spotifySearchSubmit">
+          <input type="submit" value="Search Spotify" className="spotifySearchSubmit"/>
         </form>
         <div id="searchResults" className='searchBox'>
 
@@ -43,7 +42,6 @@
         {{else}}
         <form id='loginForm'
           name='loginForm'
-          onSubmit={handleLogin}
           action="/spotifyLogin"
           method='GET'
           className="mainForm">

@@ -69,7 +69,6 @@ const callback = async (req, res) => {
 };
 
 const searchSongs = async (req, res) => {
-  console.log(req.query);
   let query = '';
   if (req.query.title) {
     query += `track:${req.query.title}`;
@@ -78,7 +77,6 @@ const searchSongs = async (req, res) => {
     q: `track:${req.query.track} artist:${req.query.artist}`,
     type: 'track',
   });
-  console.log(query);
 
   let response = await fetch(`https://api.spotify.com/v1/search?${query}`, {
     method: 'GET',

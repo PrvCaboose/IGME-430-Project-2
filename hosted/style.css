@@ -129,6 +129,22 @@ nav {
     column-gap: 10px;
 }
 
+.trackInfo {
+    text-align: left;
+    flex-grow: 3;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    h3 {
+        margin: 5px 0px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 50%;
+    }
+}
+
 #user, #pass, #pass2 {
     text-align: center;
     font-size: 1.1em;

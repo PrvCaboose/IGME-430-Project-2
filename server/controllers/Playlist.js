@@ -97,13 +97,11 @@ const removeSong = async (req, res) => {
     return res.status(400).json({ error: 'No ID given!' });
   }
   try {
-    console.log(req.body._id);
-    const docs = await Playlist.updateOne({ owner: req.session.Account._id }, {
+    await Playlist.updateOne({ owner: req.session.Account._id }, {
       $pull: {
         songs: { _id: req.body._id },
       },
     }).lean().exec();
-    console.log(docs);
     return res.status(200).json({ message: 'Song Removed' });
   } catch (err) {
     console.log(err);

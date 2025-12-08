@@ -3,9 +3,11 @@ const React = require('react');
 const {useState, useEffect} = React;
 const {createRoot} = require('react-dom/client');
 
+// adds a song to playlist from form
 const handleSong = (e, onSongAdded) => {
   e.preventDefault();
   helper.hideError();
+  console.log(onSongAdded)
   
   const title = e.target.querySelector('#songTitle').value;
   const artist = e.target.querySelector('#songArtist').value;
@@ -29,7 +31,7 @@ const handleSong = (e, onSongAdded) => {
   helper.sendPost(e.target.action, {title, artist, length}, onSongAdded);
   return false;
 }
-
+// removes song from playlist
 const removeSong = async (e, triggerReload) => {
   e.preventDefault();
   helper.hideError();
@@ -37,7 +39,7 @@ const removeSong = async (e, triggerReload) => {
   helper.sendPost('/removeSong', {_id: e.target.parentElement.id}, triggerReload);
   return false;
 }
-
+// sends a post request to create a playlist
 const handlePlaylist = (e, onPlaylistCreated) => {
   e.preventDefault();
   helper.hideError();
@@ -52,12 +54,12 @@ const handlePlaylist = (e, onPlaylistCreated) => {
   e.target.hidden = true;
   return false;
 }
-
+// toggles add song form
 const showForm = () => {
   const overlay = document.getElementById('popupOverlay');
   overlay.classList.toggle('show');
 }
-
+// returns form to add song
 const SongForm = (props) => {
   return(
     <div id='popupOverlay' className='overlay-container'>
@@ -91,7 +93,7 @@ const SongForm = (props) => {
     
   );
 }
-
+// returns create playlist form or nothing if one exists
 const PlaylistForm = (props) => {
   if (props.hidden) {
     return (<></>);
@@ -113,7 +115,7 @@ const PlaylistForm = (props) => {
     );
   }
 }
-
+// returns list of songs in playlist as html
 const SongList = (props) => {
   const [songs, setSongs] = useState(props.songs);
 
@@ -122,6 +124,7 @@ const SongList = (props) => {
       const response = await fetch('/getSongs');
       const data = await response.json();
       setSongs(data.songs);
+      console.log('refreshing songs')
     }
     loadPlaylistFromServer();
   }, [props.reloadSongs]);
@@ -132,8 +135,11 @@ const SongList = (props) => {
     );
   }
 
+  // format songs into html
   const songNodes = songs.map(song => {
+    // format params for Youtube search
     const param = new URLSearchParams({'search_query' : song.title + ' ' + song.artist});
+    // format song time
     let songSec = song.length % 60;
     let songMin = Math.floor(song.length/60);
 
@@ -155,6 +161,7 @@ const SongList = (props) => {
     );
   });
 
+  // format time song cont.
   let playlistSec = 0;
 
   songs.forEach(song => {
@@ -179,6 +186,7 @@ const SongList = (props) => {
   );
 }
 
+// handle spotify auth
 const handleLogin = async (e) => {
   e.preventDefault();
   helper.hideError();
@@ -190,11 +198,13 @@ const handleLogin = async (e) => {
     }
   });
 
+  // reload window
   response = await response.json();
   window.location = response.redirect;
   return false;
 }
 
+// gets playlist from server
 const getPlaylist = async () => {
   let response = await fetch('/getPlaylist');
   response = await response.json();
@@ -205,9 +215,19 @@ const getPlaylist = async () => {
   return response;
 }
 
-const handleSpotifySearch = async (e) => {
+const addSongToPlaylist = (e, title, artist, length) => {
   e.preventDefault();
+  helper.sendPost('addSong', {title, artist, length}, null);
 
+  // add a temp html element to playlist
+
+  return false;
+}
+
+// Sends a request to server and formats response into html
+const handleSpotifySearch = async (e, onSongAdded) => {
+  e.preventDefault();
+  console.log(onSongAdded);
   const title = document.getElementById('songNameBox').value;
   const artist = document.getElementById('songArtistBox').value;
 
@@ -226,47 +246,69 @@ const handleSpotifySearch = async (e) => {
   console.log(response);
   const searchBox = document.getElementById('searchResults');
   response.songs.tracks.items.forEach(item => {
-
-    let div = document.createElement('div');
+    // main div
+    const div = document.createElement('div');
     div.className = 'trackResult';
 
-    let header1 = document.createElement('h3');;
-    header1.className = 'trackName';
-    header1.innerHTML = item.name;
-    div.appendChild(header1);
+    // title artist div
+    const div2 = document.createElement('div');
+    div2.className = 'trackInfo';
 
-    let header3 = document.createElement('h3');;
-    header3.className = 'trackArtist';
-    header3.innerHTML = item.artists[0].name;
-    div.appendChild(header3);
+    // title element
+    const title = document.createElement('h3');;
+    title.className = 'trackName';
+    title.innerHTML = item.name;
+    div2.appendChild(title);
 
-    let header2 = document.createElement('h3');;
-    header2.className = 'trackLength';
+    // artist element
+    const artist = document.createElement('h3');;
+    artist.className = 'trackArtist';
+    artist.innerHTML = item.artists[0].name;
+    div2.appendChild(artist);
+
+    div.appendChild(div2);
+
+    // song length element
+    const length = document.createElement('h3');;
+    length.className = 'trackLength';
     let sec = '0';
     if (Math.floor((item.duration_ms/1000)%60) > 10) {
       sec = Math.floor((item.duration_ms/1000)%60);
     } else {
       sec += Math.floor((item.duration_ms/1000)%60);
     }
-    header2.innerHTML = `${Math.floor(item.duration_ms/60000)}:${sec}`;
+    length.innerHTML = `${Math.floor(item.duration_ms/60000)}:${sec}`;
+    div.appendChild(length);
 
-    div.appendChild(header2);
+    // spotify link element
+    const spotifyLink = document.createElement('a');
+    spotifyLink.href = item.external_urls.spotify;
+    spotifyLink.className = 'spotifyLink';
+    spotifyLink.target = '_blank';
+    spotifyLink.innerText = 'Go to Spotify';
+    div.appendChild(spotifyLink);
+
+    // add to playlist
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'addSpotifySearch';
+    addBtn.innerHTML = 'Add';
+    addBtn.onclick = (e) => {addSongToPlaylist(e, item.name, item.artists[0].name,
+       Math.floor((item.duration_ms/1000)))};
+    div.appendChild(addBtn);
+
     searchBox.appendChild(div);
     }
   );
-}
-
-const SpotifyLink = () => {
-
 }
 
 const getPremium = () => {
   helper.sendPost('/buyPremium', {}, null);
 }
 
-
 const App = (props) => {
   const [reloadSongs, setReloadSongs] = useState(false);
+
   return (
     <div>
       <div>
@@ -288,14 +330,16 @@ const init = () => {
     getPremiumBtn.onclick = getPremium;
   }
 
+  // Set spotify elements
   let spotifyForm = document.getElementById('loginForm');
   if (spotifyForm) {
     spotifyForm.onsubmit = handleLogin;
   } else {
     spotifyForm = document.getElementById('spotifySearch');
-    spotifyForm.onsubmit = handleSpotifySearch;
+    spotifyForm.onsubmit = (e) => { handleSpotifySearch(e) };
   }
 
+  // on playlist load, load app
   const root = createRoot(document.getElementById('app'));
   getPlaylist().then((e) => {
     root.render(<App hidden={e} playlist={e}/>);
