@@ -6,7 +6,6 @@
 */
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
-const { unique } = require('underscore');
 
 /* When generating a password hash, bcrypt (and most other password hash
    functions) use a "salt". The salt is simply extra data that gets hashed
@@ -53,7 +52,7 @@ AccountSchema.statics.toAPI = (doc) => ({
   username: doc.username,
   _id: doc._id,
   isPremium: doc.isPremium,
-  token: doc.spotifyToken
+  token: doc.spotifyToken,
 });
 
 // Helper function to hash a password

@@ -8,6 +8,7 @@ const router = (app) => {
 
   app.get('/spotifyLogin', mid.requiresSecure, mid.requiresLogin, controllers.Spotify.login);
   app.get('/callback', mid.requiresSecure, mid.requiresLogin, controllers.Spotify.callback);
+  app.get('/searchSongs', mid.requiresLogin, controllers.Spotify.searchSongs);
 
   app.post('/createPlaylist', mid.requiresLogin, controllers.Playlist.initPlaylist);
   app.post('/addSong', mid.requiresLogin, controllers.Playlist.addSong);

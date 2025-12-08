@@ -61,41 +61,51 @@ const callback = async (req, res) => {
     json: true,
   });
   response = await response.json();
-  req.session.Account.token = response.access_token;
 
-  searchSongs(req, res);
-  // PROCESS api token
+  // store api token in user session
+  req.session.Account.token = response.access_token;
 
   return res.redirect('/maker');
 };
 
 const searchSongs = async (req, res) => {
-  url = 'https://api.spotify.com/v1/search?q=track:Mirror%20artist:Kendrick%20Lamar&type=track';
-  let response = await fetch(url, {
+  console.log(req.query);
+  let query = '';
+  if (req.query.title) {
+    query += `track:${req.query.title}`;
+  }
+  query = querystring.stringify({
+    q: `track:${req.query.track} artist:${req.query.artist}`,
+    type: 'track',
+  });
+  console.log(query);
+
+  let response = await fetch(`https://api.spotify.com/v1/search?${query}`, {
     method: 'GET',
     headers: {
-      'Authorization': 'Bearer ' + req.session.Account.token 
+      Authorization: `Bearer ${req.session.Account.token}`,
     },
   });
 
-  let items = await response.json();
-  console.log(items)
-  console.log(items.tracks.items);
-  
-  response = await fetch('https://api.spotify.com/v1/tracks/5xoYormSTltk6F9SlQV6mm', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + req.session.Account.token 
-    },
-  });
+  // let items = await response.json();
+  // // console.log(items)
+  // // console.log(items.tracks.items);
+
+  // response = await fetch('https://api.spotify.com/v1/tracks/5xoYormSTltk6F9SlQV6mm', {
+  //   method: 'GET',
+  //   headers: {
+  //     'Authorization': 'Bearer ' + req.session.Account.token
+  //   },
+  // });
 
   response = await response.json();
 
-  console.log(response)
-
-}
+  // console.log(response);
+  res.status(200).json({ songs: response });
+};
 
 module.exports = {
   login,
   callback,
+  searchSongs,
 };

@@ -7,7 +7,7 @@ const makerPage = (req, res) => {
   if (req.session.Account.token) {
     hasToken = true;
   }
-  res.render('app', { isPremium: req.session.Account.isPremium,  hasToken: hasToken});
+  res.render('app', { isPremium: req.session.Account.isPremium, hasToken });
 };
 
 const initPlaylist = async (req, res) => {

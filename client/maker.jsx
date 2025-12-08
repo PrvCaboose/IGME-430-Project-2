@@ -205,8 +205,55 @@ const getPlaylist = async () => {
   return response;
 }
 
-const handleSpotifySearch = async () => {
+const handleSpotifySearch = async (e) => {
+  e.preventDefault();
 
+  const title = document.getElementById('songNameBox').value;
+  const artist = document.getElementById('songArtistBox').value;
+
+  const params = new URLSearchParams();
+  params.append('track', title);
+  params.append('artist', artist);
+
+  let response = await fetch('/searchSongs?'+params.toString(), {
+    method: 'GET',
+    headers: {
+      accept: 'application/json'
+    }
+  });
+
+  response = await response.json();
+  console.log(response);
+  const searchBox = document.getElementById('searchResults');
+  response.songs.tracks.items.forEach(item => {
+
+    let div = document.createElement('div');
+    div.className = 'trackResult';
+
+    let header1 = document.createElement('h3');;
+    header1.className = 'trackName';
+    header1.innerHTML = item.name;
+    div.appendChild(header1);
+
+    let header3 = document.createElement('h3');;
+    header3.className = 'trackArtist';
+    header3.innerHTML = item.artists[0].name;
+    div.appendChild(header3);
+
+    let header2 = document.createElement('h3');;
+    header2.className = 'trackLength';
+    let sec = '0';
+    if (Math.floor((item.duration_ms/1000)%60) > 10) {
+      sec = Math.floor((item.duration_ms/1000)%60);
+    } else {
+      sec += Math.floor((item.duration_ms/1000)%60);
+    }
+    header2.innerHTML = `${Math.floor(item.duration_ms/60000)}:${sec}`;
+
+    div.appendChild(header2);
+    searchBox.appendChild(div);
+    }
+  );
 }
 
 const SpotifyLink = () => {

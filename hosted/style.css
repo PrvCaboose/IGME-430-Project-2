@@ -119,6 +119,16 @@ nav {
     margin: 5px auto;
 }
 
+.trackResult {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content:flex-end;
+    /*margin: 0.5em;*/
+    outline: rgb(67, 67, 67) 1px solid;
+    column-gap: 10px;
+}
+
 #user, #pass, #pass2 {
     text-align: center;
     font-size: 1.1em;
