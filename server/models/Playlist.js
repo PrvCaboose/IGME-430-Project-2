@@ -3,6 +3,12 @@ const _ = require('underscore');
 
 const setName = (name) => _.escape(name).trim();
 
+/*
+ Playlist data:
+ name
+ song array
+ owner
+*/
 const PlaylistSchema = new mongoose.Schema({
   name: {
     type: String,

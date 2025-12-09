@@ -7,13 +7,13 @@ const {createRoot} = require('react-dom/client');
 const handleSong = (e, onSongAdded) => {
   e.preventDefault();
   helper.hideError();
-  console.log(onSongAdded)
-  
+  // get song form data  
   const title = e.target.querySelector('#songTitle').value;
   const artist = e.target.querySelector('#songArtist').value;
   const min = parseInt(e.target.querySelector('#songLengthMin').value) || 0;
   const sec = parseInt(e.target.querySelector('#songLengthSec').value) || 0;
 
+  // calculate length
   const length = (min * 60) + sec;
 
   if (!title || !artist) {
@@ -50,9 +50,10 @@ const handlePlaylist = (e, onPlaylistCreated) => {
     helper.handleError('Name is required!');
     return false;
   }
+  // send request and hide form
   helper.sendPost(e.target.action, {name}, onPlaylistCreated);
   e.target.hidden = true;
-
+  // show spotify form on playlist creation
   const doc = document.getElementById('spotifyWrapper');
   doc.style = 'display: flex;';
 
@@ -143,12 +144,14 @@ const SongList = (props) => {
     spotifyForm.onsubmit = (e) => { handleSpotifySearch(e, props.triggerReload) };
   }
 
+  // dont show if there is no playlist
   if (!props.playlist) {
     return(
       <div></div>
     );
   }
 
+  // show spotify search
   const doc = document.getElementById('spotifyWrapper');
   doc.style = 'display: flex;';
 
@@ -247,12 +250,15 @@ const addSongToPlaylist = async(e, title, artist, length, callback) => {
 // Sends a request to server and formats response into html
 const handleSpotifySearch = async (e, onSongAdded) => {
   e.preventDefault();
-  console.log(onSongAdded);
 
+  // clear results
   document.getElementById('searchResults').innerHTML = '';
+
+  // get search input
   const title = document.getElementById('songNameBox').value;
   const artist = document.getElementById('songArtistBox').value;
 
+  // send response
   const params = new URLSearchParams();
   params.append('track', title);
   params.append('artist', artist);
@@ -265,7 +271,7 @@ const handleSpotifySearch = async (e, onSongAdded) => {
   });
 
   response = await response.json();
-  console.log(response);
+  // format results into html and add results into search box
   const searchBox = document.getElementById('searchResults');
   response.songs.tracks.items.forEach(item => {
     // main div
@@ -324,10 +330,12 @@ const handleSpotifySearch = async (e, onSongAdded) => {
   );
 }
 
+// get premium
 const getPremium = () => {
   helper.sendPost('/buyPremium', {}, null);
 }
 
+// render the app
 const App = (props) => {
   const [reloadSongs, setReloadSongs] = useState(false);
 

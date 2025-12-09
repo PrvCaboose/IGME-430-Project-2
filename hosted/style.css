@@ -7,14 +7,6 @@ html, body {
     background-color: rgb(83, 83, 83);
 }
 
-#logo {
-    height: 40px;
-    width: 40;
-    padding-top: 5px;
-    float:left;
-    border-radius: 8px;
-}
-
 nav {
     width: fit-content;
     margin: auto;
@@ -51,7 +43,6 @@ nav {
     cursor: pointer;
 }
 
-
 .mainForm {
     display: flex;
     align-items: center;
@@ -79,6 +70,7 @@ nav {
     background-color: rgb(41, 41, 41);
     margin: auto;
     width: 50%;
+    border-radius: 50px;
 }
 
 .formSubmit {

@@ -4,11 +4,13 @@ const { Account } = models;
 
 const loginPage = (req, res) => res.render('login');
 
+// destroy session and log user out
 const logout = (req, res) => {
   req.session.destroy();
   res.redirect('/');
 };
 
+// given a username and password, check the account info
 const login = (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -17,6 +19,7 @@ const login = (req, res) => {
     return req.status(400).json({ error: 'All fields are required!' });
   }
 
+  // compares pass hash against hash in db
   return Account.authenticate(username, pass, (err, account) => {
     if (err || !account) {
       return res.status(401).json({ error: 'Wrong username or password!' });
@@ -28,7 +31,9 @@ const login = (req, res) => {
   });
 };
 
+// creates a new account in the db
 const signup = async (req, res) => {
+  // get params and validate them
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
   const pass2 = `${req.body.pass2}`;
@@ -42,10 +47,12 @@ const signup = async (req, res) => {
     return req.status(400).json({ error: 'Passwords do not match!' });
   }
 
+  // create a password hash and create a new account in the db
   try {
     const hash = await Account.generateHash(pass);
     const newAccount = new Account({ username, password: hash, isPremium });
     await newAccount.save();
+    // set session data
     req.session.Account = Account.toAPI(newAccount);
     return res.json({ redirect: '/maker' });
   } catch (err) {
@@ -56,7 +63,7 @@ const signup = async (req, res) => {
     return res.status(500).json({ error: 'An error occured!' });
   }
 };
-
+// updates the password hash in the db using the username
 const changePassword = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -82,7 +89,7 @@ const changePassword = async (req, res) => {
     return res.status(500).json({ error: 'An error ocurred, please try again!' });
   }
 };
-
+// updates premium status in db
 const buyPremium = async (req, res) => {
   if (!req.session.Account._id) {
     return res.status(400).json({ error: 'No Account id!' });

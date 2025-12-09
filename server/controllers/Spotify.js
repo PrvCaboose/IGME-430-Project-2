@@ -19,11 +19,10 @@ const login = (req, res) => {
   });
 };
 
+// callback function used to get api token upon login
 const callback = async (req, res) => {
   const code = req.query.code || null;
   const state = req.query.state || null;
-
-  console.log('callback');
 
   if (state === null) {
     return res.redirect(`/#${
@@ -31,20 +30,7 @@ const callback = async (req, res) => {
         error: 'state_mismatch',
       })}`);
   }
-  // const authOptions = {
-  //   url: 'https://accounts.spotify.com/api/token',
-  //   form: {
-  //     code,
-  //     redirect_uri: REDIRECT_URI,
-  //     grant_type: 'authorization_code',
-  //   },
-  //   headers: {
-  //     'content-type': 'application/x-www-form-urlencoded',
-  //     Authorization: `Basic ${(`${CLIENT_ID}:
-  // ${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64')}`,
-  //   },
-  //   json: true,
-  // };
+
   let authCode = Buffer.from(`${CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`);
   authCode = authCode.toString('base64');
   let response = await fetch('https://accounts.spotify.com/api/token', {
@@ -64,11 +50,13 @@ const callback = async (req, res) => {
 
   // store api token in user session
   req.session.Account.token = response.access_token;
-
+  // redirect user back to page
   return res.redirect('/maker');
 };
 
+// search spotify for songs given a title and artist
 const searchSongs = async (req, res) => {
+  // set up query
   let query = '';
   if (req.query.title) {
     query += `track:${req.query.title}`;
@@ -85,20 +73,8 @@ const searchSongs = async (req, res) => {
     },
   });
 
-  // let items = await response.json();
-  // // console.log(items)
-  // // console.log(items.tracks.items);
-
-  // response = await fetch('https://api.spotify.com/v1/tracks/5xoYormSTltk6F9SlQV6mm', {
-  //   method: 'GET',
-  //   headers: {
-  //     'Authorization': 'Bearer ' + req.session.Account.token
-  //   },
-  // });
-
   response = await response.json();
-
-  // console.log(response);
+  // send songs back to user
   res.status(200).json({ songs: response });
 };
 
