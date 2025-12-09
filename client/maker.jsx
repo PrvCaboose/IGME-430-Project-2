@@ -128,9 +128,7 @@ const SongList = (props) => {
     const loadPlaylistFromServer = async () => {
       const response = await fetch('/getSongs');
       const data = await response.json();
-      console.log(data);
       setSongs(data.songs);
-      console.log('refreshing songs')
     }
     loadPlaylistFromServer();
   }, [props.reloadSongs]);
