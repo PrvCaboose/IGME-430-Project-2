@@ -1,5 +1,5 @@
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
-const REDIRECT_URI = 'http://127.0.0.1:3000/callback';
+const REDIRECT_URI = process.env.REDIRECT_URI || 'http://127.0.0.1:3000/callback';
 const crypto = require('crypto');
 const querystring = require('querystring');
 
