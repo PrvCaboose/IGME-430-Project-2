@@ -44,13 +44,13 @@ const addSong = async (req, res) => {
 
   try {
     const query = { owner: req.session.Account._id };
-    const docs = await Playlist.findOne(query).select('name').lean().exec();
+    const docs = await Playlist.findOne(query).select('_id').lean().exec();
 
     if (!docs) {
       return res.status(400).json({ error: 'No playlist created!' });
     }
     const songDocs = await Playlist.findOneAndUpdate(
-      { name: docs.name },
+      { _id: docs._id },
       { $push: { songs: songData } },
     ).lean().exec();
     return res.status(201).json({ song: songDocs });

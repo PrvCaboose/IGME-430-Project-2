@@ -52,6 +52,10 @@ const handlePlaylist = (e, onPlaylistCreated) => {
   }
   helper.sendPost(e.target.action, {name}, onPlaylistCreated);
   e.target.hidden = true;
+
+  const doc = document.getElementById('spotifyWrapper');
+  doc.style = 'display: flex;';
+
   return false;
 }
 // toggles add song form
@@ -123,6 +127,7 @@ const SongList = (props) => {
     const loadPlaylistFromServer = async () => {
       const response = await fetch('/getSongs');
       const data = await response.json();
+      console.log(data);
       setSongs(data.songs);
       console.log('refreshing songs')
     }
@@ -143,6 +148,9 @@ const SongList = (props) => {
       <div></div>
     );
   }
+
+  const doc = document.getElementById('spotifyWrapper');
+  doc.style = 'display: flex;';
 
   // format songs into html
   const songNodes = songs.map(song => {
@@ -226,6 +234,7 @@ const getPlaylist = async () => {
 
 const addSongToPlaylist = async(e, title, artist, length, callback) => {
   e.preventDefault();
+  console.log(title, artist)
   await helper.sendPost('addSong', {title, artist, length}, callback);
 
   // clear form
@@ -321,6 +330,9 @@ const getPremium = () => {
 
 const App = (props) => {
   const [reloadSongs, setReloadSongs] = useState(false);
+
+  const doc = document.getElementById('spotifyWrapper');
+  doc.style = 'display: none;';
 
   return (
     <div>
