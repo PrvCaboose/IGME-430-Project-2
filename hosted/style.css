@@ -163,6 +163,11 @@ nav {
     font-style: italic;
 }
 
+#errorBox {
+    width: 50%;
+    margin: auto;
+}
+
 .playlistFormContainer {
     display: block;
     margin: auto;
