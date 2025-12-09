@@ -19,9 +19,11 @@ nav {
     width: fit-content;
     margin: auto;
     height: 50px;
-    background-color: #009434;
+    background-color: rgb(20, 255, 55);
     display: flex;
     justify-content: center;
+    border: hidden;
+    border-radius: 10px;
 }
 
 .navlink {
@@ -31,6 +33,8 @@ nav {
     font-size: 1.3em;
     font-weight: bold;
     float: left;
+    border: hidden;
+    border-radius: 10px ;
 }
 
 .navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
@@ -38,13 +42,9 @@ nav {
     text-decoration: none;
     padding: 5px;
     border-radius: 4px;
-    background-color: #009434;
+    background-color: rgb(20, 255, 55);
     transition: background-color 0.4s ease;
-}
-
-.navlink a:hover {
-    transition: background-color 0.8s ease;
-    background-color: #009434;
+    border: hidden;
 }
 
 #getPremiumLink {
@@ -113,6 +113,25 @@ nav {
     color: white;
     z-index: 0;
     margin-top: 5px;
+
+    h3{
+        margin: 5px;
+    }
+
+    button {
+        align-self: center;
+        height: 30px;
+        border-radius: 50px;
+        margin: auto;
+        background-color: rgb(20, 255, 55);
+        border: hidden;
+    }
+    button:hover {
+        background-color: rgb(17, 204, 45);
+    }
+    button:active {
+        background-color: rgb(33, 252, 66);
+    }
 }
 
 #spotifySearch {
@@ -127,22 +146,6 @@ nav {
     /*margin: 0.5em;*/
     outline: rgb(67, 67, 67) 1px solid;
     column-gap: 10px;
-}
-
-.trackInfo {
-    text-align: left;
-    flex-grow: 3;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
-    h3 {
-        margin: 5px 0px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        width: 50%;
-    }
 }
 
 #user, #pass, #pass2 {
@@ -222,6 +225,10 @@ nav {
     color: white;
     z-index: 0;
     margin-top: 5px;
+
+    .songButton {
+        margin-right: 15px;
+    }
 }
 
 
@@ -259,10 +266,17 @@ nav {
 .songInfo {
     flex-grow: 3;
     text-align: left;
+    overflow: hidden;
+    width: 60%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 h3.songTitle {
     margin: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 h3.songArtist {
@@ -277,22 +291,23 @@ p.songLength, button.songButton, a.songLink {
     margin-bottom: 5px;
 }
 
-button.songButton{
+.songButton{
     background-color: rgb(20, 255, 55);
     border: hidden;
     border-radius: 5px;
     margin-right: 5px;
+    width: 100px;
 }
-button.songButton:hover {
+.songButton:hover {
     background-color: rgb(17, 204, 45);
 }
-button.songButton:active {
+.songButton:active {
     background-color: rgb(33, 252, 66);
 }
 
 a.songLink {
     margin-right: 5px;
-    
+    text-align: center;
 }
 a.songLink:link {
     color: lightseagreen;

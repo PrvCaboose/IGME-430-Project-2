@@ -129,6 +129,15 @@ const SongList = (props) => {
     loadPlaylistFromServer();
   }, [props.reloadSongs]);
 
+  // Set spotify elements
+  let spotifyForm = document.getElementById('loginForm');
+  if (spotifyForm) {
+    spotifyForm.onsubmit = handleLogin;
+  } else {
+    spotifyForm = document.getElementById('spotifySearch');
+    spotifyForm.onsubmit = (e) => { handleSpotifySearch(e, props.triggerReload) };
+  }
+
   if (!props.playlist) {
     return(
       <div></div>
@@ -215,11 +224,13 @@ const getPlaylist = async () => {
   return response;
 }
 
-const addSongToPlaylist = (e, title, artist, length) => {
+const addSongToPlaylist = async(e, title, artist, length, callback) => {
   e.preventDefault();
-  helper.sendPost('addSong', {title, artist, length}, null);
+  await helper.sendPost('addSong', {title, artist, length}, callback);
 
-  // add a temp html element to playlist
+  // clear form
+  console.log(e.target.parentElement);
+  e.target.parentElement.parentElement.innerHTML = '';
 
   return false;
 }
@@ -228,6 +239,8 @@ const addSongToPlaylist = (e, title, artist, length) => {
 const handleSpotifySearch = async (e, onSongAdded) => {
   e.preventDefault();
   console.log(onSongAdded);
+
+  document.getElementById('searchResults').innerHTML = '';
   const title = document.getElementById('songNameBox').value;
   const artist = document.getElementById('songArtistBox').value;
 
@@ -248,29 +261,29 @@ const handleSpotifySearch = async (e, onSongAdded) => {
   response.songs.tracks.items.forEach(item => {
     // main div
     const div = document.createElement('div');
-    div.className = 'trackResult';
+    div.className = 'song';
 
     // title artist div
     const div2 = document.createElement('div');
-    div2.className = 'trackInfo';
+    div2.className = 'songInfo';
 
     // title element
     const title = document.createElement('h3');;
-    title.className = 'trackName';
+    title.className = 'songName';
     title.innerHTML = item.name;
     div2.appendChild(title);
 
     // artist element
     const artist = document.createElement('h3');;
-    artist.className = 'trackArtist';
+    artist.className = 'songArtist';
     artist.innerHTML = item.artists[0].name;
     div2.appendChild(artist);
 
     div.appendChild(div2);
 
     // song length element
-    const length = document.createElement('h3');;
-    length.className = 'trackLength';
+    const length = document.createElement('p');;
+    length.className = 'songLength';
     let sec = '0';
     if (Math.floor((item.duration_ms/1000)%60) > 10) {
       sec = Math.floor((item.duration_ms/1000)%60);
@@ -283,7 +296,7 @@ const handleSpotifySearch = async (e, onSongAdded) => {
     // spotify link element
     const spotifyLink = document.createElement('a');
     spotifyLink.href = item.external_urls.spotify;
-    spotifyLink.className = 'spotifyLink';
+    spotifyLink.className = 'songLink';
     spotifyLink.target = '_blank';
     spotifyLink.innerText = 'Go to Spotify';
     div.appendChild(spotifyLink);
@@ -291,10 +304,10 @@ const handleSpotifySearch = async (e, onSongAdded) => {
     // add to playlist
     const addBtn = document.createElement('button');
     addBtn.type = 'button';
-    addBtn.className = 'addSpotifySearch';
-    addBtn.innerHTML = 'Add';
+    addBtn.className = 'songButton';
+    addBtn.innerHTML = 'Add Song';
     addBtn.onclick = (e) => {addSongToPlaylist(e, item.name, item.artists[0].name,
-       Math.floor((item.duration_ms/1000)))};
+       Math.floor((item.duration_ms/1000)), onSongAdded)};
     div.appendChild(addBtn);
 
     searchBox.appendChild(div);
@@ -328,15 +341,6 @@ const init = () => {
   const getPremiumBtn = document.getElementById('getPremiumLink');
   if (getPremiumBtn) {
     getPremiumBtn.onclick = getPremium;
-  }
-
-  // Set spotify elements
-  let spotifyForm = document.getElementById('loginForm');
-  if (spotifyForm) {
-    spotifyForm.onsubmit = handleLogin;
-  } else {
-    spotifyForm = document.getElementById('spotifySearch');
-    spotifyForm.onsubmit = (e) => { handleSpotifySearch(e) };
   }
 
   // on playlist load, load app

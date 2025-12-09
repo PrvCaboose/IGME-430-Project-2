@@ -49,11 +49,11 @@ const addSong = async (req, res) => {
     if (!docs) {
       return res.status(400).json({ error: 'No playlist created!' });
     }
-    await Playlist.findOneAndUpdate(
+    const songDocs = await Playlist.findOneAndUpdate(
       { name: docs.name },
       { $push: { songs: songData } },
     ).lean().exec();
-    return res.status(201).json({ song: songData });
+    return res.status(201).json({ song: songDocs });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: "Couldn't add song" });
